@@ -1,0 +1,254 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Tenant {
+  id        String   @id @default(uuid())
+  name      String
+  slug      String   @unique
+  domain    String?  @unique
+  plan      String   @default("FREE")
+  config    Json?
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+  is_deleted Boolean  @default(false)
+
+  users        User[]
+  departments  Department[]
+  courses      Course[]
+  students     Student[]
+  enrollments  Enrollment[]
+  timetables   Timetable[]
+  attendances  Attendance[]
+  feeStructures FeeStructure[]
+  feeRecords   FeeRecord[]
+  exams        Exam[]
+  results      Result[]
+  announcements Announcement[]
+  reads        AnnouncementRead[]
+}
+
+model User {
+  id           String   @id @default(uuid())
+  tenant_id    String
+  email        String   @unique
+  name         String
+  role         Role
+  passwordHash String?
+  created_at   DateTime @default(now())
+  updated_at   DateTime @updatedAt
+  is_deleted   Boolean  @default(false)
+
+  tenant       Tenant    @relation(fields: [tenant_id], references: [id])
+  student      Student?
+  announcements Announcement[] // Author
+  reads        AnnouncementRead[]
+}
+
+enum Role {
+  SUPER_ADMIN
+  COLLEGE_ADMIN
+  TEACHER
+  STUDENT
+  PARENT
+  ACCOUNTS
+}
+
+model Department {
+  id         String   @id @default(uuid())
+  tenant_id  String
+  name       String
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+  is_deleted Boolean  @default(false)
+
+  tenant    Tenant   @relation(fields: [tenant_id], references: [id])
+  courses   Course[]
+}
+
+model Course {
+  id            String   @id @default(uuid())
+  tenant_id     String
+  department_id String
+  name          String
+  created_at    DateTime @default(now())
+  updated_at    DateTime @updatedAt
+  is_deleted    Boolean  @default(false)
+
+  tenant        Tenant      @relation(fields: [tenant_id], references: [id])
+  department    Department  @relation(fields: [department_id], references: [id])
+  enrollments   Enrollment[]
+  attendances   Attendance[]
+  timetables    Timetable[]
+}
+
+model Student {
+  id         String   @id @default(uuid())
+  tenant_id  String
+  user_id    String   @unique
+  roll_no    String?
+  batch      String?
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+  is_deleted Boolean  @default(false)
+
+  tenant      Tenant       @relation(fields: [tenant_id], references: [id])
+  user        User         @relation(fields: [user_id], references: [id])
+  enrollments Enrollment[]
+  feeRecords  FeeRecord[]
+  results     Result[]
+}
+
+model Enrollment {
+  id         String   @id @default(uuid())
+  tenant_id  String
+  student_id String
+  course_id  String
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+  is_deleted Boolean  @default(false)
+
+  tenant   Tenant  @relation(fields: [tenant_id], references: [id])
+  student  Student @relation(fields: [student_id], references: [id])
+  course   Course  @relation(fields: [course_id], references: [id])
+}
+
+model Timetable {
+  id         String   @id @default(uuid())
+  tenant_id  String
+  course_id  String
+  dayOfWeek  Int      // 1-7
+  startTime  String
+  endTime    String
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+  is_deleted Boolean  @default(false)
+
+  tenant Tenant @relation(fields: [tenant_id], references: [id])
+  course Course @relation(fields: [course_id], references: [id])
+}
+
+model Attendance {
+  id         String   @id @default(uuid())
+  tenant_id  String
+  course_id  String
+  student_id String
+  date       DateTime
+  status     AttendanceStatus
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+  is_deleted Boolean  @default(false)
+
+  tenant  Tenant @relation(fields: [tenant_id], references: [id])
+  course  Course @relation(fields: [course_id], references: [id])
+
+  @@index([tenant_id, course_id, date])
+}
+
+enum AttendanceStatus {
+  PRESENT
+  ABSENT
+  LATE
+}
+
+model FeeStructure {
+  id         String   @id @default(uuid())
+  tenant_id  String
+  name       String
+  amount     Float
+  dueDate    DateTime
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+  is_deleted Boolean  @default(false)
+
+  tenant     Tenant      @relation(fields: [tenant_id], references: [id])
+  records    FeeRecord[]
+}
+
+model FeeRecord {
+  id              String   @id @default(uuid())
+  tenant_id       String
+  student_id      String
+  feeStructure_id String
+  amountPaid      Float    @default(0)
+  status          FeeStatus @default(PENDING)
+  receiptUrl      String?
+  created_at      DateTime @default(now())
+  updated_at      DateTime @updatedAt
+  is_deleted      Boolean  @default(false)
+
+  tenant       Tenant       @relation(fields: [tenant_id], references: [id])
+  student      Student      @relation(fields: [student_id], references: [id])
+  feeStructure FeeStructure @relation(fields: [feeStructure_id], references: [id])
+}
+
+enum FeeStatus {
+  PENDING
+  PARTIAL
+  PAID
+  OVERDUE
+}
+
+model Exam {
+  id         String   @id @default(uuid())
+  tenant_id  String
+  name       String
+  date       DateTime
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+  is_deleted Boolean  @default(false)
+
+  tenant  Tenant   @relation(fields: [tenant_id], references: [id])
+  results Result[]
+}
+
+model Result {
+  id         String   @id @default(uuid())
+  tenant_id  String
+  exam_id    String
+  student_id String
+  marks      Float
+  grade      String?
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+  is_deleted Boolean  @default(false)
+
+  tenant  Tenant  @relation(fields: [tenant_id], references: [id])
+  exam    Exam    @relation(fields: [exam_id], references: [id])
+  student Student @relation(fields: [student_id], references: [id])
+}
+
+model Announcement {
+  id           String   @id @default(uuid())
+  tenant_id    String
+  title        String
+  content      String
+  audience     Role[]
+  author_id    String
+  created_at   DateTime @default(now())
+  updated_at   DateTime @updatedAt
+  is_deleted   Boolean  @default(false)
+
+  tenant  Tenant             @relation(fields: [tenant_id], references: [id])
+  author  User               @relation(fields: [author_id], references: [id])
+  reads   AnnouncementRead[]
+}
+
+model AnnouncementRead {
+  id              String   @id @default(uuid())
+  tenant_id       String
+  announcement_id String
+  user_id         String
+  created_at      DateTime @default(now())
+  updated_at      DateTime @updatedAt
+  is_deleted      Boolean  @default(false)
+
+  tenant       Tenant       @relation(fields: [tenant_id], references: [id])
+  announcement Announcement @relation(fields: [announcement_id], references: [id])
+  user         User         @relation(fields: [user_id], references: [id])
+}
