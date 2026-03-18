@@ -31,6 +31,7 @@ export class AuthGuard implements CanActivate {
             // Verify via Clerk
             const verifiedToken = await verifyToken(token, {
                 secretKey: process.env.CLERK_SECRET_KEY,
+                issuer: `https://${process.env.CLERK_ISSUER_DOMAIN || 'your-issuer.clerk.accounts.dev'}`,
             });
 
             const clerkUserId = verifiedToken.sub;

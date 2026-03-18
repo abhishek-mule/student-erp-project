@@ -2,6 +2,7 @@
     "name": "@college-erp/prisma",
     "version": "1.0.0",
     "main": "index.js",
+    "types": "index.d.ts",
     "scripts": {
         "generate": "prisma generate",
         "push": "prisma db push",

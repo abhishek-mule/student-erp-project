@@ -13,11 +13,11 @@ export class S3Service {
             region: 'auto',
             endpoint: this.configService.get('R2_ENDPOINT'),
             credentials: {
-                accessKeyId: this.configService.get('R2_ACCESS_KEY_ID'),
-                secretAccessKey: this.configService.get('R2_SECRET_ACCESS_KEY'),
+                accessKeyId: this.configService.get('R2_ACCESS_KEY_ID') || '',
+                secretAccessKey: this.configService.get('R2_SECRET_ACCESS_KEY') || '',
             },
         });
-        this.bucketName = this.configService.get('R2_BUCKET_NAME');
+        this.bucketName = this.configService.get('R2_BUCKET_NAME') || '';
     }
 
     async uploadFile(key: string, body: Buffer, contentType: string) {
