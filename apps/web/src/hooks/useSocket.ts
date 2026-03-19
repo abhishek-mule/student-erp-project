@@ -2,7 +2,14 @@
 
 import { useEffect, useState } from 'react';
 import { io, Socket } from 'socket.io-client';
-import { useAuth } from '@clerk/nextjs';
+
+// TODO: Replace with custom useAuth hook after frontend implementation
+const useAuth = () => {
+    return {
+        userId: 'stub-user-id',
+        getToken: async () => 'stub-token',
+    };
+};
 
 export const useSocket = (tenantId: string) => {
     const [socket, setSocket] = useState<Socket | null>(null);
@@ -35,7 +42,7 @@ export const useSocket = (tenantId: string) => {
         return () => {
             if (newSocket) newSocket.close();
         };
-    }, [tenantId, userId]);
+    }, [tenantId, userId, getToken]);
 
     return socket;
 };

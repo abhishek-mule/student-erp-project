@@ -1,6 +1,13 @@
-import { Module, MiddlewareConsumer, NestModule, RequestMethod } from '@nestjs/common';
+import {
+  Module,
+  MiddlewareConsumer,
+  NestModule,
+  RequestMethod,
+} from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
-import { BullModule } from '@nestjs/bullmq';
+import { ThrottlerModule, ThrottlerGuard } from '@nestjs/throttler';
+import { APP_GUARD } from '@nestjs/core';
+
 import { PrismaModule } from './prisma/prisma.module';
 import { EventsModule } from './events/events.module';
 import { TenantMiddleware } from './tenant/tenant.middleware';
@@ -12,20 +19,23 @@ import { ExamsModule } from './exams/exams.module';
 import { ResultsModule } from './results/results.module';
 import { AnnouncementsModule } from './announcements/announcements.module';
 import { S3Module } from './s3/s3.module';
+import { AuthModule } from './auth/auth.module';
+import { AppController } from './app.controller';
+import { AppService } from './app.service';
 
 @Module({
   imports: [
     ConfigModule.forRoot({
       isGlobal: true,
     }),
-    BullModule.forRoot({
-      connection: {
-        host: process.env.REDIS_HOST || 'localhost',
-        port: parseInt(process.env.REDIS_PORT || '6379', 10),
-        password: process.env.REDIS_PASSWORD,
+    ThrottlerModule.forRoot([
+      {
+        ttl: 60000,
+        limit: 100, // 100 requests per 60 seconds per IP
       },
-    }),
+    ]),
     PrismaModule,
+    AuthModule,
     EventsModule,
     StudentsModule,
     UsersModule,
@@ -35,6 +45,14 @@ import { S3Module } from './s3/s3.module';
     ResultsModule,
     AnnouncementsModule,
     S3Module,
+  ],
+  controllers: [AppController],
+  providers: [
+    AppService,
+    {
+      provide: APP_GUARD,
+      useClass: ThrottlerGuard,
+    },
   ],
 })
 export class AppModule implements NestModule {

@@ -13,7 +13,7 @@ export default function AttendanceMarking({ searchParams }: { searchParams: { co
     const [attendance, setAttendance] = useState<Record<string, string>>({});
 
     const toggleAll = (status: string) => {
-        const nextAtt: any = {};
+        const nextAtt: Record<string, string> = {};
         students.forEach(s => nextAtt[s.id] = status);
         setAttendance(nextAtt);
     };

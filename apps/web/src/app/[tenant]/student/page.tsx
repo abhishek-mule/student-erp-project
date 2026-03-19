@@ -104,7 +104,7 @@ const StudentDashboard = ({ params }: { params: { tenant: string } }) => {
 
                 {/* Timetable Mock */}
                 <div className="p-6 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl shadow-sm">
-                    <h3 className="font-bold text-lg mb-4">Tomorrow's Classes</h3>
+                    <h3 className="font-bold text-lg mb-4">Tomorrow&apos;s Classes</h3>
                     <div className="space-y-4">
                         {[
                             { time: "08:30 AM", subject: "Discrete Mathematics", room: "LT-2" },

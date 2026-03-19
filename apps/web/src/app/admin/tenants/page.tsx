@@ -9,7 +9,7 @@ const mockTenants = [
 ];
 
 export default function TenantsAdmin() {
-    const [tenants, setTenants] = useState(mockTenants);
+    const [tenants] = useState(mockTenants);
     const [isModalOpen, setModalOpen] = useState(false);
 
     return (

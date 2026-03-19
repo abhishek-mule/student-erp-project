@@ -1,8 +1,9 @@
 export default function AdminDashboard({
-    params,
+    params: _params,
 }: {
     params: { tenant: string };
 }) {
+    void _params;
     return (
         <div className="space-y-6">
             <div className="flex justify-between items-center">

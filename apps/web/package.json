@@ -9,11 +9,9 @@
     "lint": "next lint"
   },
   "dependencies": {
-    "@clerk/nextjs": "^7.0.5",
     "@college-erp/prisma": "^1.0.0",
     "@sentry/nextjs": "^10.44.0",
     "next": "14.2.35",
-    "posthog-js": "^1.361.1",
     "react": "^18",
     "react-dom": "^18",
     "socket.io-client": "^4.8.3"

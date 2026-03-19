@@ -7,22 +7,22 @@ import { Role } from '@college-erp/prisma';
 @Controller('students')
 @UseGuards(AuthGuard)
 export class StudentsController {
-    constructor(private readonly studentsService: StudentsService) { }
+  constructor(private readonly studentsService: StudentsService) {}
 
-    @Get()
-    @Roles(Role.COLLEGE_ADMIN, Role.TEACHER)
-    findAll() {
-        return this.studentsService.findAll();
-    }
+  @Get()
+  @Roles(Role.COLLEGE_ADMIN, Role.TEACHER)
+  findAll() {
+    return this.studentsService.findAll();
+  }
 
-    @Post()
-    @Roles(Role.COLLEGE_ADMIN)
-    create(@Body() data: any) {
-        return this.studentsService.create(data);
-    }
+  @Post()
+  @Roles(Role.COLLEGE_ADMIN)
+  create(@Body() data: any) {
+    return this.studentsService.create(data);
+  }
 
-    @Get(':id')
-    findOne(@Param('id') id: string) {
-        return this.studentsService.findOne(id);
-    }
+  @Get(':id')
+  findOne(@Param('id') id: string) {
+    return this.studentsService.findOne(id);
+  }
 }

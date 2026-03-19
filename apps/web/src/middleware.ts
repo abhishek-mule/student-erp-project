@@ -1,22 +1,11 @@
-import { clerkMiddleware, createRouteMatcher } from "@clerk/nextjs/server";
-import { NextResponse } from "next/server";
+import { NextResponse, NextRequest } from "next/server";
 
-const isPublicRoute = createRouteMatcher(["/", "/sign-in(.*)", "/sign-up(.*)", "/api(.*)"]);
-
-export default clerkMiddleware(async (auth, request) => {
-  if (isPublicRoute(request)) return NextResponse.next();
-
+export function middleware(request: NextRequest) {
   const hostname = request.headers.get("host") || "";
   const url = request.nextUrl;
 
   const subdomain = hostname.split(".")[0];
   const isSuperAdmin = hostname === "admin.platform.com" || hostname.startsWith("admin.localhost");
-
-  // Auth protection for non-public routes
-  const authObj = await auth();
-  if (!authObj.userId) {
-    return authObj.redirectToSignIn({ returnBackUrl: request.url });
-  }
 
   // Rewrite logic
   if (isSuperAdmin) {
@@ -32,7 +21,7 @@ export default clerkMiddleware(async (auth, request) => {
   }
 
   return NextResponse.next();
-});
+}
 
 export const config = {
   matcher: ["/((?!.*\\..*|_next).*)", "/", "/(api|trpc)(.*)"],

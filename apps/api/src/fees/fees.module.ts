@@ -1,16 +1,11 @@
 import { Module } from '@nestjs/common';
 import { FeesService } from './fees.service';
 import { FeesController } from './fees.controller';
-import { FeeProcessor } from './fee.processor';
-import { BullModule } from '@nestjs/bullmq';
+import { S3Module } from '../s3/s3.module';
 
 @Module({
-  imports: [
-    BullModule.registerQueue({
-      name: 'pdf-receipts',
-    }),
-  ],
-  providers: [FeesService, FeesController, FeeProcessor],
+  imports: [S3Module],
+  providers: [FeesService],
   controllers: [FeesController],
 })
-export class FeesModule { }
+export class FeesModule {}
