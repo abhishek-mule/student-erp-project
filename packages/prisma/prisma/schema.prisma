@@ -31,6 +31,7 @@ model Tenant {
   results      Result[]
   announcements Announcement[]
   reads        AnnouncementRead[]
+  auditLogs    AuditLog[]
 }
 
 model User {
