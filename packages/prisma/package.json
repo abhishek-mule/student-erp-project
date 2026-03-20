@@ -4,9 +4,9 @@
     "main": "index.js",
     "types": "index.d.ts",
     "scripts": {
-        "generate": "prisma generate",
-        "push": "prisma db push",
-        "migrate": "prisma migrate dev"
+        "generate": "npx prisma generate",
+        "push": "npx prisma db push",
+        "migrate": "npx prisma migrate dev"
     },
     "dependencies": {
         "@prisma/client": "^5.10.2"
