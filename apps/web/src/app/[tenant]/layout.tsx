@@ -13,8 +13,7 @@ import {
     Moon,
     Sun,
     Search,
-    Menu,
-    X
+    Menu
 } from "lucide-react";
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";

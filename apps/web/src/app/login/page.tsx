@@ -39,7 +39,7 @@ export default function LoginPage() {
                 const data = await res.json();
                 setError(data.message || "Invalid credentials. Please try again.");
             }
-        } catch (e) {
+        } catch (_) {
             setError("Something went wrong. Please check your connection.");
         } finally {
             setLoading(false);

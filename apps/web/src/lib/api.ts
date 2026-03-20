@@ -39,7 +39,7 @@ export async function apiRequest(endpoint: string, options: RequestInit = {}) {
             },
           });
         }
-      } catch (e) {
+      } catch (_) {
         clearTokens();
         window.location.href = '/login';
       }
