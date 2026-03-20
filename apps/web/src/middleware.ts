@@ -15,7 +15,8 @@ export function middleware(request: NextRequest) {
   if (
     subdomain !== "www" &&
     !subdomain.includes("localhost") &&
-    subdomain !== "platform"
+    subdomain !== "platform" &&
+    !hostname.endsWith(".vercel.app")
   ) {
     return NextResponse.rewrite(new URL(`/${subdomain}${url.pathname}`, request.url));
   }
