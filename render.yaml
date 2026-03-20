@@ -1,0 +1,27 @@
+services:
+  - type: web
+    name: college-erp-api
+    runtime: node
+    plan: free
+    region: ohio
+    buildCommand: npm install && npx turbo run build --filter=api
+    startCommand: node apps/api/dist/main
+    envVars:
+      - key: PORT
+        value: 3001
+      - key: NODE_ENV
+        value: production
+      - key: DATABASE_URL
+        sync: false
+      - key: JWT_SECRET
+        sync: false
+      - key: R2_ENDPOINT
+        sync: false
+      - key: R2_ACCESS_KEY_ID
+        sync: false
+      - key: R2_SECRET_ACCESS_KEY
+        sync: false
+      - key: R2_BUCKET_NAME
+        sync: false
+      - key: R2_PUBLIC_DOMAIN
+        sync: false
