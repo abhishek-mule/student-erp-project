@@ -1,0 +1,50 @@
+﻿npx : ΓÇó turbo 2.8.17
+At line:1 char:1
++ npx turbo run build 
+--filter=api > 
+build_debug.txt 2>&1
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo           
+   : NotSpecified: (ΓÇó tur  
+  bo 2.8.17:String) [], Re   
+ moteException
+    + FullyQualifiedErrorId  
+   : NativeCommandError
+ 
+ΓÇó Packages in scope: api
+ΓÇó Running build in 1 packages
+ΓÇó Remote caching disabled
+api:build: cache miss, executing d861e578b87f0503
+api:build: 
+api:build: > api@0.0.1 build
+api:build: > ../../node_modules/.bin/nest build
+api:build: 
+api:build: '..' is not recognized as an internal or external command,
+api:build: operable program or batch file.
+api:build: npm error Lifecycle script `build` failed with error:
+api:build: npm error code 1
+api:build: npm error path C:\Users\HP\Desktop\Student\college-erp\apps\api
+api:build: npm error workspace api@0.0.1
+api:build: npm error location C:\Users\HP\Desktop\Student\college-erp\apps\api
+api:build: npm error command failed
+api:build: npm error command C:\WINDOWS\system32\cmd.exe /d /s /c ../../node_modules/.bin/nest build
+api:build: ERROR: command 
+finished with error: command 
+(C:\Users\HP\Desktop\Student\
+college-erp\apps\api) 
+C:\nvm4w\nodejs\npm.cmd run 
+build exited (1)
+api#build: command (C:\Users\
+HP\Desktop\Student\college-er
+p\apps\api) 
+C:\nvm4w\nodejs\npm.cmd run 
+build exited (1)
+
+ Tasks:    0 successful, 1 total
+Cached:    0 cached, 1 total
+  Time:    674ms 
+Failed:    api#build
+
+ ERROR  run failed: command  
+exited (1)
