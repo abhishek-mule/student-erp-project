@@ -12,8 +12,13 @@ export class TenantMiddleware implements NestMiddleware {
     const xFor = req.headers['x-forwarded-host'];
     const host = (Array.isArray(xFor) ? xFor[0] : xFor) || req.headers.host || '';
     
+    // Skip checking for health checks or public landing
+    if (req.url === '/health' || req.url === '/') {
+      return next();
+    }
+    
     // Security: Whitelist allowed root domains to prevent Host header spoofing
-    const ALLOWED_DOMAINS = ['.college-erp.com', '.vercel.app', 'localhost:3000', 'localhost:3001'];
+    const ALLOWED_DOMAINS = ['.college-erp.com', '.vercel.app', '.onrender.com', 'localhost:3000', 'localhost:3001'];
     const isAllowed = ALLOWED_DOMAINS.some(domain => host.endsWith(domain) || host === domain.split(':')[0]);
 
     if (!isAllowed) {
