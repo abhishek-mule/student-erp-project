@@ -1,9 +1,14 @@
 const prismaClient = require('@prisma/client');
 const { PrismaClient } = prismaClient;
 
-const prisma = new PrismaClient();
+let prismaInstance;
 
 module.exports = { 
   ...prismaClient,
-  prisma 
+  get prisma() {
+    if (!prismaInstance) {
+      prismaInstance = new PrismaClient();
+    }
+    return prismaInstance;
+  }
 };
