@@ -12,7 +12,8 @@ import {
     Search,
     MessageSquare,
     ClipboardList,
-    MoreHorizontal
+    MoreHorizontal,
+    Bell
 } from "lucide-react";
 import { motion } from "framer-motion";
 
